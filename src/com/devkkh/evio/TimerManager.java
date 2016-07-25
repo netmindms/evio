@@ -5,11 +5,10 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 /**
- * Created by Administrator on 2012-07-21.
+ * Created by Administrator on 2011-07-21.
  */
 public class TimerManager {
 	private long _minTimerTime=-1;
-	private EvTask _task;
 	private Vector<FireInfo> _fireList;
 	private int _idSeed=0;
 	LinkedList<EvTimer> _timerList;
@@ -33,7 +32,6 @@ public class TimerManager {
 	void open() {
 		_timerList = new LinkedList<>();
 		_fireList = new Vector<>();
-		_task = EvTask.getCurrentTask();
 		_minTimerTime = Long.MAX_VALUE;
 	}
 
@@ -126,7 +124,6 @@ public class TimerManager {
 
 	void delTimer(int id) {
 		//dlog.d(tag, "delete timer, id=" + id);
-		int idx=-1;
 		ListIterator<EvTimer> itr = _timerList.listIterator();
 
 		while(itr.hasNext()) {
@@ -134,7 +131,6 @@ public class TimerManager {
 				itr.remove();
 			}
 		}
-
 //		dlog.d(tag, "del timer, total cnt=" + _timerList.size());
 	}
 

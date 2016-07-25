@@ -4,7 +4,7 @@ package com.devkkh.evio;
  * Created by netmind on 12. 7. 19.
  */
 public class EvContext {
-    private final static String tag="EvContext";
+//    private final static String tag="EvContext";
     EvTask task;
 
     public static EvContext getEvContext() {

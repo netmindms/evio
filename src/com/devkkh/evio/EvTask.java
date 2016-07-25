@@ -80,9 +80,8 @@ public class EvTask extends Thread {
 
 	public void end() {
 		postMsg(EvMsg.buildMsg(EVM_EXIT));
-		//closeTimerContext();
 		try {
-			join(3000);
+			join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -150,7 +149,7 @@ public class EvTask extends Thread {
 	}
 
 	private void process_loop() throws IOException {
-		dlog.d(tag, "process loop start");
+		//dlog.v(tag, "process loop start");
 		_timerManager = new TimerManager();
 		_timerManager.open();
 		while (!mLoopExit) {
@@ -160,16 +159,18 @@ public class EvTask extends Thread {
 				int chs;
 				long wtime = _timerManager.getWaitTimeMs();
 				if( wtime !=0) {
-//					dlog.d(tag, "start selet...");
+//					dlog.d(tag, "start selet..., selector="+selector);
 					chs = selector.select(wtime);
 //					dlog.d(tag, "    select end, chs="+chs);
 				} else {
 					chs = 0;
 				}
-				if(chs <= 0 ) {
-					_timerManager.checkTimer();
-					procMsgs();
-				} else {
+				
+				// EdEvent에 의해 깨어 날 수도 있으므로 항상 타이머와 메시지큐를 검사해야 함. 
+				_timerManager.checkTimer();
+				procMsgs();
+				
+				if(chs > 0) {
 					Set<SelectionKey> selectedKeys = selector.selectedKeys();
 					dlog.v(tag, "task="+this+", chs="+chs+", keysize="+selectedKeys.size());
 					Iterator<SelectionKey> itr = selectedKeys.iterator();
@@ -220,7 +221,7 @@ public class EvTask extends Thread {
 
 	public static void msleep(int msec) {
 		try {
-			Thread.currentThread().sleep(msec);
+			Thread.sleep(msec);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

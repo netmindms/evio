@@ -62,20 +62,8 @@ public class EvTcpChunk extends EvTcpChannel {
 			//dlog.e(tag, "=== read data ="+rdcnt);
 			if (rdcnt > 0) {
 				if (mCurBuf.remaining() == 0) {
-					if (true) {
-						mCurBuf.position(0);
-						OnChunk(mCurBuf);
-					} else {
-						//dlog.d(tag, "packet complete...");
-						mCurBuf.position(0);
-						boolean bufrel = OnChunk(mCurBuf);
-						if (bufrel) {
-							mCurBuf = ByteBuffer.allocate(mBufSize);
-							mCurBuf.order(ByteOrder.LITTLE_ENDIAN);
-						} else
-							mCurBuf.limit(mCurBuf.capacity());
-					}
-
+					mCurBuf.position(0);
+					OnChunk(mCurBuf);
 					packetSize = 0; // reset
 				}
 			}

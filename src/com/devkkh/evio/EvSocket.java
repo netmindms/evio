@@ -66,6 +66,15 @@ public class EvSocket extends EvEvent {
 			return -1;
 		}
 	}
+	
+	public int open(SocketChannel ch, Listener lis) {
+		registerEvent(ch, EVT_READ);
+		_lis = lis;
+		_type = SOCKET_TCP;
+		mChannel = ch;
+		return 0;
+	}
+	
 	public int bind(String ip, int port) {
 		InetSocketAddress localaddr  = new InetSocketAddress(ip, port);
 		try {

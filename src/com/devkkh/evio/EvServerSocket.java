@@ -47,13 +47,13 @@ public class EvServerSocket extends EvEvent {
 	}
 	
 	
-	public EvSocket accept() {
+	public SocketChannel accept() {
 		try {
 			SocketChannel childch = mChannel.accept();
 			childch.configureBlocking(false);
-			EvSocket evsock = new EvSocket(childch);
-			evsock.registerEvent(childch, EVT_READ);
-			return evsock;
+			//EvSocket evsock = new EvSocket(childch);
+//			evsock.registerEvent(childch, EVT_READ);
+			return childch;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -61,8 +61,14 @@ public class EvServerSocket extends EvEvent {
 	}
 	
 	public void reject() {
-		EvSocket sch = accept();
-		sch.close();
+//		EvSocket sch = accept();
+		SocketChannel sch = accept();
+		try {
+			sch.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void close() {
