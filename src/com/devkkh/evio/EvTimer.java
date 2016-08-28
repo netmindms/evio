@@ -17,18 +17,32 @@ public class EvTimer extends EvEvent {
 	public interface Listener {
 		void OnTimer(EvTimer timer, int cnt);
 	}
-	public int set(int firstms, int periodms, Listener lis) {
-//		dlog.d(tag, "set timer,="+ this);
+	
+	public int setUs(long firstus, long periodus, Listener lis) {
 		_tm = EvContext.getCurrentTask().getTimerManager();
 
 		_fisrtExpired = false;
-		_period = periodms * 1000000;
+		_period = periodus * 1000;
 		_context = EvContext.getEvContext();
 		_task = _context.task;
 		_lis = lis;
-		_id = _tm.newTimer(firstms*1000000, this);
+		_id = _tm.newTimer(firstus*1000, this);
 
 		return _id;
+	}
+	
+	public int set(long firstms, long periodms, Listener lis) {
+//		dlog.d(tag, "set timer,="+ this);
+//		_tm = EvContext.getCurrentTask().getTimerManager();
+//
+//		_fisrtExpired = false;
+//		_period = periodms * 1000000;
+//		_context = EvContext.getEvContext();
+//		_task = _context.task;
+//		_lis = lis;
+//		_id = _tm.newTimer(firstms*1000000, this);
+
+		return setUs(1000*firstms, 1000*periodms, lis);
 	}
 
 	public void kill() {
