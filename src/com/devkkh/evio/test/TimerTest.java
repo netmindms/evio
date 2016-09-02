@@ -22,6 +22,8 @@ public class TimerTest {
 	public void doTimerTest() throws Exception {
 		class TimerTask extends EvTask {
 			CntTimer _timer1;
+			CntTimer _timer2;
+			CntTimer _oneShotTimer;
 			EvTimer _timerEnd;
 			
 			@Override
@@ -35,8 +37,26 @@ public class TimerTest {
 						}
 					});
 					
+					_timer2 = new CntTimer();
+					_timer2.set(20, 20, new EvTimer.Listener() {
+						
+						@Override
+						public void OnTimer(EvTimer timer, int cnt) {
+							_timer2._expireCnt++;
+						}
+					});
+					
+					_oneShotTimer = new CntTimer();
+					_oneShotTimer.set(100, 0, new EvTimer.Listener() {
+						
+						@Override
+						public void OnTimer(EvTimer timer, int cnt) {
+							_oneShotTimer._expireCnt++;
+						}
+					});
+					
 					_timerEnd = new EvTimer();
-					_timerEnd.set(1001, 1001, new EvTimer.Listener() {
+					_timerEnd.set(1005, 1005, new EvTimer.Listener() {
 						
 						@Override
 						public void OnTimer(EvTimer timer, int cnt) {
@@ -54,6 +74,8 @@ public class TimerTest {
 		_task.start();
 		_task.join();
 		assertEquals(10, _task._timer1._expireCnt);
+		assertEquals(50, _task._timer2._expireCnt);
+		assertEquals(1, _task._oneShotTimer._expireCnt);
 		
 	}
 

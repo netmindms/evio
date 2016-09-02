@@ -6,9 +6,9 @@ import java.nio.ByteOrder;
 
 public class EvTcpChunk extends EvTcpChannel {
 	private static final String tag = "EvTcpChunk";
-	int packetSize;
+	int _packetSize;
 	ByteBuffer mCurBuf;
-	ByteBuffer mSizeBuf;
+	ByteBuffer _sizeBuf;
 	int mBufSize;
 	boolean isDynamicBuf=false;
 	private IEvTcpChunkCb mCallback=null;
@@ -19,9 +19,9 @@ public class EvTcpChunk extends EvTcpChannel {
 
 		mCurBuf = ByteBuffer.allocate(mBufSize);
 
-		mSizeBuf = ByteBuffer.allocate(4);
-		mSizeBuf.order(ByteOrder.LITTLE_ENDIAN);
-		packetSize = 0;
+		_sizeBuf = ByteBuffer.allocate(4);
+		_sizeBuf.order(ByteOrder.LITTLE_ENDIAN);
+		_packetSize = 0;
 	}
 
 	public void setCallback(IEvTcpChunkCb cb) {
@@ -31,32 +31,32 @@ public class EvTcpChunk extends EvTcpChannel {
 	@Override
 	public void OnRead() {
 		int rdcnt;
-		if (packetSize <= 0) {
+		if (_packetSize <= 0) {
 			//int r = 4 - mSizeBuf.position();
-			rdcnt = recv(mSizeBuf);
+			rdcnt = recv(_sizeBuf);
 			dlog.d(tag, "=== read=" + rdcnt);
 			if (rdcnt > 0) {
-				if (mSizeBuf.position() == 4) {
-					mSizeBuf.rewind();
-					packetSize = mSizeBuf.getInt();
+				if (_sizeBuf.position() == 4) {
+					_sizeBuf.rewind();
+					_packetSize = _sizeBuf.getInt();
 					//dlog.d(tag, "get len=" + packetSize);
-					mSizeBuf.rewind();
+					_sizeBuf.rewind();
 					//mCurBuf.limit(packetSize);
 					if (isDynamicBuf) {
-						dlog.d(tag, "alloc chunk buf,size=" + packetSize);
-						mCurBuf = ByteBuffer.allocate(packetSize);
+						dlog.d(tag, "alloc chunk buf,size=" + _packetSize);
+						mCurBuf = ByteBuffer.allocate(_packetSize);
 					} else {
 						mCurBuf.position(0);
-						mCurBuf.limit(packetSize);
+						mCurBuf.limit(_packetSize);
 					}
 				} else {
-					dlog.d(tag, "=== p=" + mSizeBuf.position());
+					dlog.d(tag, "=== p=" + _sizeBuf.position());
 					return;
 				}
 			}
 		}
 
-		if (packetSize > 0) {
+		if (_packetSize > 0) {
 			// int rdcnt = packetSize - mCurBuf.position();
 			rdcnt = recv(mCurBuf);
 			//dlog.e(tag, "=== read data ="+rdcnt);
@@ -64,7 +64,7 @@ public class EvTcpChunk extends EvTcpChannel {
 				if (mCurBuf.remaining() == 0) {
 					mCurBuf.position(0);
 					OnChunk(mCurBuf);
-					packetSize = 0; // reset
+					_packetSize = 0; // reset
 				}
 			}
 		}

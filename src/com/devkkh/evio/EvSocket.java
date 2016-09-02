@@ -48,7 +48,9 @@ public class EvSocket extends EvEvent {
 		}
 
 		_type = type;
-		_lis = lis;
+		if(lis != null) {
+			_lis = lis;
+		}
 		try {
 			if(type == SOCKET_TCP) {
 				mChannel = SocketChannel.open();

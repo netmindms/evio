@@ -54,10 +54,11 @@ public class EvPipe extends EvEvent {
 	
 	public int send(ByteBuffer bf) {
 		try {
-			return mSinkCh.write(bf);
+			return mSinkCh.write(bf); // pipe write의 return은 0이 될 수 있다.
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("### sink ch write error");
 			return -1;
 		}
 	}
