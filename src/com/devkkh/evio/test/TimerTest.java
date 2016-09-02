@@ -56,7 +56,7 @@ public class TimerTest {
 					});
 					
 					_timerEnd = new EvTimer();
-					_timerEnd.set(1005, 1005, new EvTimer.Listener() {
+					_timerEnd.set(1010, 1010, new EvTimer.Listener() {
 						
 						@Override
 						public void OnTimer(EvTimer timer, int cnt) {
