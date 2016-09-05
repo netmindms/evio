@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.devkkh.evio.EvMsg;
 import com.devkkh.evio.EvTask;
+import com.devkkh.evio.EvCtrlMsg;
 
 public class MsgTest {
 
@@ -37,6 +38,46 @@ public class MsgTest {
 		_task.postExit();
 		_task.join();
 		assertEquals(1000, _task._msgRecvCnt);
+	}
+	
+	@Test
+	public void CtrlMsgTest() throws Exception {
+
+		class MsgTask extends EvTask {
+			EvCtrlMsg _ctrlMsg;
+			int _sendMsgCnt =0;
+			int _postMsgCnt = 0;
+			@Override
+			public void OnMsgProc(EvMsg msg) {
+				if(msg.msgId == EVM_INIT) {
+					_ctrlMsg = new EvCtrlMsg();
+					_ctrlMsg.open(new EvCtrlMsg.Listener() {
+						@Override
+						public void OnCtrlMsg(EvMsg msg) {
+							if(msg.ctrlMsgId == 1000) {
+								_sendMsgCnt++;
+							} else if(msg.ctrlMsgId == 1001) {
+								_postMsgCnt++;
+							}
+						}
+					});
+				} else if(msg.msgId == EVM_CLOSE) {
+					_ctrlMsg.close();
+				}
+			}
+
+		}
+
+		MsgTask _task = new MsgTask();
+		_task.start();
+		EvCtrlMsg cm = _task._ctrlMsg;
+		for(int i=0;i<100;i++) {
+			cm.sendMsg(1000);
+			cm.postMsg(1001);
+		}
+		_task.end();
+		assertEquals(100, _task._sendMsgCnt);
+		assertEquals(100, _task._postMsgCnt);
 	}
 
 }

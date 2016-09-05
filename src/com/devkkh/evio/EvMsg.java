@@ -5,7 +5,9 @@ public class EvMsg {
 	public int param1, param2;
 	public Object obj;
 	boolean isSync;
-	
+	public EvCtrlMsg ctrlMsg;
+	public int ctrlMsgId;
+
 	EvMsg(int msgid, int p1, int p2, Object o) {
 		msgId = msgid;
 		param1 = p1;

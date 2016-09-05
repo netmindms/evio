@@ -19,6 +19,7 @@ public class EvTask extends Thread {
 	public static final int EVM_EXIT =2;
 //	public static final int EVM_TIMER =3;
 //	public static final int EVM_SOCKET =4;
+	public static final int EVM_CTRL=5;
 
 	public static final int EVM_USER =1000;
 
@@ -58,18 +59,18 @@ public class EvTask extends Thread {
 	}
 
 	public void sendMsg(EvMsg msg) {
-		synchronized (mMsgQue) {
-			msg.isSync = true;
-			mMsgQue.add(msg);
-		}
-		selector.wakeup();
-		try {
-			synchronized(msg) {
-				msg.wait();
+		synchronized (msg) {
+			synchronized (mMsgQue) {
+				msg.isSync = true;
+				mMsgQue.add(msg);
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			selector.wakeup();
+			try {
+				msg.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 
@@ -134,7 +135,9 @@ public class EvTask extends Thread {
 			}
 			if(msg == null)
 				break;
-			if(msg.msgId == EVM_EXIT) {
+			if(msg.msgId == EVM_CTRL) {
+				msg.ctrlMsg._lis.OnCtrlMsg(msg);
+			} else if(msg.msgId == EVM_EXIT) {
 				mLoopExit = true;
 			} else {
 				OnMsgProc(msg);

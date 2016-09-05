@@ -43,11 +43,7 @@ public class EvTimer extends EvEvent {
 
 		return setUs(1000*firstms, 1000*periodms, lis);
 	}
-
-	public int set(long firstms, long periodms, Listener lis) {
-//		dlog.d(tag, "set timer,="+ this);
-		return setUs(firstms*1000, periodms*1000, lis);
-	}
+	
 
 	public int set(int periodms, Listener lis) {
 		return set(0, periodms, lis);
