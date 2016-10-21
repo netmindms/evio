@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

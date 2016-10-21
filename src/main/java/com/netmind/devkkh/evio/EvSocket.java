@@ -1,8 +1,11 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
+
+
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
@@ -98,8 +101,10 @@ public class EvSocket extends EvEvent {
 	}
 	
 	public void OnConnected() {
-		if(_lis != null)
+//		((SocketChannel)mChannel).socket().co
+		if(_lis != null) {
 			_lis.OnSocketEvent(this, EVT_CONNECTED);
+		}
 	}
 	
 	public void OnDisconnected() {
@@ -177,6 +182,9 @@ public class EvSocket extends EvEvent {
 			mLastReadCnt = 0;
 			if(_type == SOCKET_TCP) {
 				mLastReadCnt = ((SocketChannel)mChannel).read(buf);
+				if(mLastReadCnt<=0) {
+					dlog.e(tag, "#### read error, mLastReadCnt="+mLastReadCnt);
+				}
 			} else if(_type == SOCKET_UDP) {
 				((DatagramChannel)mChannel).receive(buf);
 				mLastReadCnt = buf.position();
@@ -214,11 +222,18 @@ public class EvSocket extends EvEvent {
 	@Override
 	public void OnEvent(int event) {
 		if(event == EVT_CONNECTED) {
-			mSelectionKey.interestOps(SelectionKey.OP_READ);
+
 			try {
 				if(_type == SOCKET_TCP) {
-					((SocketChannel)mChannel).finishConnect();
-					OnConnected();
+					boolean r = ((SocketChannel)mChannel).finishConnect();
+					if(r) {
+						dlog.d(tag, "finishConnect, true");
+						mSelectionKey.interestOps(SelectionKey.OP_READ);
+//						registerEvent(mChannel, EVT_READ);
+						OnConnected();
+					} else {
+						// error
+					}
 				}
 			} catch (IOException e) {
 				dlog.e(tag, "### finish connect error...");
@@ -229,7 +244,7 @@ public class EvSocket extends EvEvent {
 			mLastReadCnt = 1;
 			OnRead();
 			if(mLastReadCnt < 0) {
-//				Log.d(tag, "### last read cnt error,"+mLastReadCnt);
+				dlog.d(tag, "### last read cnt error,"+mLastReadCnt);
 				OnDisconnected();
 				mSelectionKey.cancel();
 			}

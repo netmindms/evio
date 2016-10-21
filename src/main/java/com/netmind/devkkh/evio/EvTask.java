@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 import java.io.IOException;
 import java.nio.channels.ClosedSelectorException;
@@ -32,7 +32,7 @@ public class EvTask extends Thread {
 	private TimerManager _timerManager;
 
 	public EvTask() {
-		mMsgQue = new LinkedList<com.devkkh.evio.EvMsg>();
+		mMsgQue = new LinkedList<EvMsg>();
 
 		try {
 			selector = Selector.open();
@@ -239,7 +239,7 @@ public class EvTask extends Thread {
 		return id;
 	}
 
-	void killTImer(int id) {
+	void killTimer(int id) {
 		_timerManager.delTimer(id);
 	}
 

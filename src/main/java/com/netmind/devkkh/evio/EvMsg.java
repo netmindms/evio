@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 public class EvMsg {
 	public int msgId;

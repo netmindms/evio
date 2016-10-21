@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 /**
  * Created by netmind on 16. 9. 5.
@@ -23,6 +23,7 @@ public class EvCtrlMsg {
 		EvMsg msg = EvMsg.buildMsg(EvTask.EVM_CTRL, arg1, arg2, obj);
 		msg.ctrlMsg = this;
 		msg.ctrlMsgId = msgid;
+		msg.obj = obj;
 		_task.sendMsg(msg);
 	}
 
@@ -34,6 +35,7 @@ public class EvCtrlMsg {
 		EvMsg msg = EvMsg.buildMsg(EvTask.EVM_CTRL, arg1, arg2, obj);
 		msg.ctrlMsg = this;
 		msg.ctrlMsgId = msgid;
+		msg.obj = obj;
 		_task.postMsg(msg);
 	}
 	public void postMsg(int msgid) {

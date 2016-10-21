@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 /**
  * Created by netmind on 13. 7. 22.
@@ -19,6 +19,9 @@ public class EvTimer extends EvEvent {
 	}
 	
 	public int setUs(long firstus, long periodus, Listener lis) {
+		if(_id != 0) {
+			kill();
+		}
 		_tm = EvContext.getCurrentTask().getTimerManager();
 		_fisrtExpired = false;
 		_period = periodus * 1000;
@@ -31,19 +34,9 @@ public class EvTimer extends EvEvent {
 	}
 	
 	public int set(long firstms, long periodms, Listener lis) {
-//		dlog.d(tag, "set timer,="+ this);
-//		_tm = EvContext.getCurrentTask().getTimerManager();
-//
-//		_fisrtExpired = false;
-//		_period = periodms * 1000000;
-//		_context = EvContext.getEvContext();
-//		_task = _context.task;
-//		_lis = lis;
-//		_id = _tm.newTimer(firstms*1000000, this);
-
 		return setUs(1000*firstms, 1000*periodms, lis);
 	}
-	
+
 
 	public int set(int periodms, Listener lis) {
 		return set(0, periodms, lis);
@@ -51,7 +44,8 @@ public class EvTimer extends EvEvent {
 	
 	public void kill() {
 		if(_id >0) {
-			_task.killTImer(_id);
+			_task.killTimer(_id);
+			_id = 0;
 		}
 	}
 
