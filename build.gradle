@@ -1,4 +1,4 @@
-group 'com.netmind.devkkh'
+group 'com.github.netmindms'
 version '0.1.1'
 
 apply plugin: 'java'
