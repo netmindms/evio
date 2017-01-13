@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 /**
  * Created by netmind on 13. 7. 22.
@@ -35,7 +35,7 @@ public class EvTimer extends EvEvent {
 	public int set(long firstms, long periodms, Listener lis) {
 		return setUs(1000*firstms, 1000*periodms, lis);
 	}
-	
+
 
 	public int set(int periodms, Listener lis) {
 		return set(0, periodms, lis);
