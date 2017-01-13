@@ -1,5 +1,6 @@
 package com.devkkh.evio;
 
+import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
@@ -22,8 +23,11 @@ public class EvEvent {
 		channel = ch;
 		if (ch != null) {
 			try {
+				ch.configureBlocking(false);
 				mSelectionKey = channel.register(_task.selector, event, this);
 			} catch (ClosedChannelException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}

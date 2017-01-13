@@ -1,5 +1,6 @@
 package com.devkkh.evio;
 
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -98,8 +99,9 @@ public class EvSocket extends EvEvent {
 	}
 	
 	public void OnConnected() {
-		if(_lis != null)
+		if(_lis != null) {
 			_lis.OnSocketEvent(this, EVT_CONNECTED);
+		}
 	}
 	
 	public void OnDisconnected() {
@@ -128,12 +130,14 @@ public class EvSocket extends EvEvent {
 		InetSocketAddress address = new InetSocketAddress(ip, port);
 		boolean cret;
 		try {
-			registerEvent(mChannel, EVT_CONNECTED);
 			if(_type == SOCKET_TCP) {
+				registerEvent(mChannel, EVT_CONNECTED);
 				cret = ((SocketChannel)mChannel).connect(address);
 			} else if(_type == SOCKET_UDP) {
-				//((DatagramChannel)mChannel).connect(address);
-				((DatagramChannel)mChannel).socket().connect(address);
+				registerEvent(mChannel, EVT_READ);
+				((DatagramChannel)mChannel).connect(address);
+//				((DatagramChannel)mChannel).socket().connect(address);
+
 				cret = true;
 			} else {
 				cret = false;
@@ -191,8 +195,13 @@ public class EvSocket extends EvEvent {
 		return mLastReadCnt;
 	}
 	
-	public int sendTo(ByteBuffer buf) {
-		return 0;
+	public int sendTo(ByteBuffer buf, SocketAddress destaddr) {
+		try {
+			return ((DatagramChannel)mChannel).send(buf, destaddr);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 	
 	public int send(ByteBuffer buf) {
@@ -214,11 +223,18 @@ public class EvSocket extends EvEvent {
 	@Override
 	public void OnEvent(int event) {
 		if(event == EVT_CONNECTED) {
-			mSelectionKey.interestOps(SelectionKey.OP_READ);
+
 			try {
 				if(_type == SOCKET_TCP) {
-					((SocketChannel)mChannel).finishConnect();
-					OnConnected();
+					boolean r = ((SocketChannel)mChannel).finishConnect();
+					if(r) {
+						dlog.d(tag, "finishConnect, true");
+						mSelectionKey.interestOps(SelectionKey.OP_READ);
+//						registerEvent(mChannel, EVT_READ);
+						OnConnected();
+					} else {
+						// error
+					}
 				}
 			} catch (IOException e) {
 				dlog.e(tag, "### finish connect error...");

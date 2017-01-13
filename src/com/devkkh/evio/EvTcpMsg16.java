@@ -2,7 +2,6 @@ package com.devkkh.evio;
 
 import java.nio.ByteBuffer;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 public class EvTcpMsg16 {
 

@@ -239,7 +239,7 @@ public class EvTask extends Thread {
 		return id;
 	}
 
-	void killTImer(int id) {
+	void killTimer(int id) {
 		_timerManager.delTimer(id);
 	}
 

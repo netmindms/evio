@@ -12,7 +12,6 @@ public class TimerManager {
 	private Vector<FireInfo> _fireList;
 	private int _idSeed=0;
 	LinkedList<EvTimer> _timerList;
-	private static final String tag = "tm";
 
 
 	private class FireInfo {

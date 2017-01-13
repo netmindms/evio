@@ -43,7 +43,7 @@ public class MsgTest {
 	@Test
 	public void CtrlMsgTest() throws Exception {
 
-		class MsgTask extends EvTask {
+		class CtrlMsgTask extends EvTask {
 			EvCtrlMsg _ctrlMsg;
 			int _sendMsgCnt =0;
 			int _postMsgCnt = 0;
@@ -68,7 +68,7 @@ public class MsgTest {
 
 		}
 
-		MsgTask _task = new MsgTask();
+		CtrlMsgTask _task = new CtrlMsgTask();
 		_task.start();
 		EvCtrlMsg cm = _task._ctrlMsg;
 		for(int i=0;i<100;i++) {
