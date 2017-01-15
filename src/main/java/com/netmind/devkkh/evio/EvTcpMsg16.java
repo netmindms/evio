@@ -1,4 +1,4 @@
-package com.devkkh.evio;
+package com.netmind.devkkh.evio;
 
 import java.nio.ByteBuffer;
 
@@ -23,7 +23,6 @@ public class EvTcpMsg16 {
 		_sock = sock;
 		_sock.setOnListener(new EvSocket.Listener() {
 			
-			@Override
 			public void OnSocketEvent(EvSocket sockobj, int event) {
 				if(event == EvSocket.EVT_READ) {
 					if(_pktLen!=0) {

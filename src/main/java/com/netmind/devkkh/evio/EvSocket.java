@@ -102,10 +102,6 @@ public class EvSocket extends EvEvent {
 	}
 	
 	public void OnConnected() {
-<<<<<<< HEAD:src/com/devkkh/evio/EvSocket.java
-=======
-//		((SocketChannel)mChannel).socket().co
->>>>>>> 5574eb4113a3eb7fd570609d27096d044aafa8a3:src/main/java/com/netmind/devkkh/evio/EvSocket.java
 		if(_lis != null) {
 			_lis.OnSocketEvent(this, EVT_CONNECTED);
 		}
