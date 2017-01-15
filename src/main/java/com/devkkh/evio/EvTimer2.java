@@ -1,4 +1,4 @@
-package com.netmind.devkkh.evio;
+package com.devkkh.evio;
 
 import java.nio.ByteBuffer;
 import java.util.Timer;

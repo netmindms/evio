@@ -1,4 +1,4 @@
-package com.netmind.devkkh.evio;
+package com.devkkh.evio;
 
 
 
@@ -6,7 +6,6 @@ package com.netmind.devkkh.evio;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectableChannel;
@@ -120,7 +119,7 @@ public class EvSocket extends EvEvent {
 				_dummyBuf = ByteBuffer.allocate(128);
 			}
 			_dummyBuf.clear();
-			recv(_dummyBuf);
+			read(_dummyBuf);
 		}
 	}
 	
@@ -179,7 +178,7 @@ public class EvSocket extends EvEvent {
 		return fromaddr;
 	}
 	
-	public int recv(ByteBuffer buf) {
+	public int read(ByteBuffer buf) {
 		try {
 			mLastReadCnt = 0;
 			if(_type == SOCKET_TCP) {
@@ -188,7 +187,7 @@ public class EvSocket extends EvEvent {
 					dlog.e(tag, "#### read error, mLastReadCnt="+mLastReadCnt);
 				}
 			} else if(_type == SOCKET_UDP) {
-				((DatagramChannel)mChannel).receive(buf);
+				((DatagramChannel)mChannel).read(buf);
 				mLastReadCnt = buf.position();
 			}
 			if(mLastReadCnt>0) {
@@ -209,8 +208,13 @@ public class EvSocket extends EvEvent {
 			return -1;
 		}
 	}
+
+	public int sendTo(String msg, SocketAddress addr) {
+		ByteBuffer bf = ByteBuffer.wrap(msg.getBytes());
+		return	sendTo(bf, addr);
+	}
 	
-	public int send(ByteBuffer buf) {
+	public int write(ByteBuffer buf) {
 		try {
 			if(_type == SOCKET_TCP) {
 				return ((SocketChannel)mChannel).write(buf);
@@ -220,9 +224,14 @@ public class EvSocket extends EvEvent {
 				return -1;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	public int write(String msg) {
+		ByteBuffer bf = ByteBuffer.wrap(msg.getBytes());
+		return write(bf);
 	}
 
 	

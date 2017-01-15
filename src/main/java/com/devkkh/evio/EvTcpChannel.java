@@ -1,4 +1,4 @@
-package com.netmind.devkkh.evio;
+package com.devkkh.evio;
 
 import java.nio.ByteBuffer;
 
@@ -10,7 +10,7 @@ public class EvTcpChannel extends EvSocket {
 	}
 	
 	public int sendPacket(ByteBuffer bf) {
-		int wcnt = send(bf);
+		int wcnt = write(bf);
 		
 		return wcnt;
 	}

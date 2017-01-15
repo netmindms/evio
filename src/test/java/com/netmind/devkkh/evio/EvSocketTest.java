@@ -1,5 +1,8 @@
 package com.netmind.devkkh.evio;
 
+import com.devkkh.evio.EvMsg;
+import com.devkkh.evio.EvSocket;
+import com.devkkh.evio.EvTask;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
@@ -66,7 +69,7 @@ public class EvSocketTest {
 						if(event == EvSocket.EVT_READ) {
 							_logger.info("client read event");
 							ByteBuffer bf = ByteBuffer.allocate(100);
-							sockobj.recv(bf);
+							sockobj.read(bf);
 							try {
 								String rs = new String(bf.array(), 0, bf.limit(), "utf8");
 								_logger.info("client rs: "+rs);
@@ -85,7 +88,7 @@ public class EvSocketTest {
 				sf.flip();
 				int wcnt;
 				_clientSock.connect("127.0.0.1", 10000);
-				wcnt = _clientSock.send(sf);
+				wcnt = _clientSock.write(sf);
 				//wcnt = _clientSock.sendTo(sf, new InetSocketAddress("127.0.0.1", 10000));
 				_logger.info("client wcnt="+wcnt);
 			}

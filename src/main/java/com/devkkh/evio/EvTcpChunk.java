@@ -1,4 +1,4 @@
-package com.netmind.devkkh.evio;
+package com.devkkh.evio;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -33,7 +33,7 @@ public class EvTcpChunk extends EvTcpChannel {
 		int rdcnt;
 		if (_packetSize <= 0) {
 			//int r = 4 - mSizeBuf.position();
-			rdcnt = recv(_sizeBuf);
+			rdcnt = read(_sizeBuf);
 			dlog.d(tag, "=== read=" + rdcnt);
 			if (rdcnt > 0) {
 				if (_sizeBuf.position() == 4) {
@@ -58,7 +58,7 @@ public class EvTcpChunk extends EvTcpChannel {
 
 		if (_packetSize > 0) {
 			// int rdcnt = packetSize - mCurBuf.position();
-			rdcnt = recv(mCurBuf);
+			rdcnt = read(mCurBuf);
 			//dlog.e(tag, "=== read data ="+rdcnt);
 			if (rdcnt > 0) {
 				if (mCurBuf.remaining() == 0) {

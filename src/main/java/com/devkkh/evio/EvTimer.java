@@ -1,4 +1,4 @@
-package com.netmind.devkkh.evio;
+package com.devkkh.evio;
 
 /**
  * Created by netmind on 13. 7. 22.
